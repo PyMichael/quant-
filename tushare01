@@ -1,0 +1,41 @@
+import tushare as ts
+s = '176e0c7f17cad2702632a3...'
+ts.set_token(s)
+pro = ts.pro_api()
+import pandas as pd
+
+# 盘口详情，成交量、额，买卖5档数据
+df3 = ts.realtime_quote(ts_code='002703.sz')
+
+# 委托买二卖二
+b1 = df3.iloc[:,[14, 13]]
+b1.columns = ['P_1', 'V_1']
+b2 = df3.iloc[:,[16, 15]]
+b2.columns = ['P_1', 'V_1']
+c0 = pd.DataFrame({'P_1':[0], 'V_1':[0]})
+s1 = df3.iloc[:,[24, 23]]
+s1.columns = ['P_1', 'V_1']
+s2 = df3.iloc[:,[26, 25]]
+s2.columns = ['P_1', 'V_1']
+pd.concat([s2, s1, c0, b1, b2], axis=0)
+
+# 分笔三秒成交明细
+df = ts.realtime_tick(ts_code='002703.SZ', src='dc')
+df.tail(20)
+
+# akshare分笔
+import akshare as ak
+stock_intraday_em_df = ak.stock_intraday_em(symbol="002703")
+stock_intraday_em_df.tail(10)
+
+#  这个慢
+import akshare as ak
+df = ak.stock_zh_a_tick_tx_js(symbol="sz000001")
+df.tail(20)
+
+
+
+
+# 数据保存到excel
+df.to_excel('分笔_20241101_002797第一创业.xlsx', index=False)
+
